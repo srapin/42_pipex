@@ -6,7 +6,7 @@
 /*   By: srapin <srapin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/30 00:02:58 by srapin            #+#    #+#             */
-/*   Updated: 2023/04/14 00:50:47 by srapin           ###   ########.fr       */
+/*   Updated: 2023/04/17 23:10:24 by srapin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,10 +22,9 @@ int main(int ac, char** av, char **envp)
 		ft_printf("parse error");
 		return 1;
 	}
-	if (!param.paths)
-	{
-		ft_printf("malloc error");
-		return 1;
-	}
+	init_data(&data);
+	if (param.sep)
+		heredoc(&param, &data);
+	//first_swap(&param);
 	return pipex(&param, &data);
 }

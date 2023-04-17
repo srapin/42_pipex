@@ -6,7 +6,7 @@
 /*   By: srapin <srapin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/03 02:19:12 by srapin            #+#    #+#             */
-/*   Updated: 2023/04/14 03:09:13 by srapin           ###   ########.fr       */
+/*   Updated: 2023/04/17 23:59:41 by srapin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,34 +22,30 @@ t_boolen parse_args(int ac, char **av, char ** envp, t_param *param)
 	if (ac < 5)
 		return false;
 	param->sep = NULL;
+	param->heredoc_fd=-1;
 	if (ft_strisequal("here_doc", av[1]))
 	{
 		//heredoc(param);
-		param->infile = -1;
+		param->infile = NULL;
 		param->sep = av[2];
 		i += 1;
 	}
-	else
-		param->infile = open(av[1], O_RDONLY);
-	param->outfile = open(av[ac - 1], O_WRONLY);
+	else 
+		param->infile = av[1];
+	param->outfile = av[ac - 1];
+	//param->outfile = open(av[ac - 1], O_WRONLY | O_CREAT | O_TRUNC, 0666);
 	param->cmds = av + i;
 	param->cmd_nb = ac - 1 - i;
 	param->envp = envp;
-	param->paths = get_path(param->envp);
+	
 	return true;
 }
 
-void init_data(t_data *data, t_param *param)
+void init_data(t_data *data)
 {
-	data->first =  true;
-	data->last = false;
-	data->new_in = param->infile;
-	data->new_out = param->outfile;
-	data->prev_pip[0] = -1; 
-	data->prev_pip[1] = -1; 
-	data->current_pip[0] = -1; 
-	data->current_pip[1] = -1; 
-	data->envp = param->envp;
+	data->to_read = -1;
+	data->pip[0] = -1;
+	data->pip[1] = -1;
 	data->arg = NULL;
 	data->cmd = NULL;
 	data->path = NULL;
@@ -57,7 +53,5 @@ void init_data(t_data *data, t_param *param)
 
 void last_param(t_data *data)
 {
-	data->last = true;
-	data->current_pip[0] = -1; 
-	data->current_pip[1] = -1; 
+
 }

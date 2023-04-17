@@ -13,7 +13,7 @@
 
 #include "../inc/pipex.h"
 
-
+/*
 void exec_process(t_data *data)
 {
 	int pid;
@@ -67,34 +67,77 @@ int wait_childs(int size, int *childs_pid)
 	
 }
 
+void first_swap(t_param *param)
+{
+	int fd;
+
+	if (param->heredoc_fd > -1)
+	{
+		dup2(param->heredoc_fd, STDIN_FILENO);
+		close(param->heredoc_fd);
+	}
+	else
+	{
+		fd = open(param->infile, O_RDONLY);
+		dup2(fd, STDIN_FILENO);
+		close(fd);
+	}
+	fd = open(param->outfile, O_WRONLY | O_CREAT | O_TRUNC, 0666);
+	dup2(fd, STDOUT_FILENO);
+	close(fd);
+}
+
+*/
+
+void fail_process()
+{
+	perror("fork error");
+	exit(EXIT_FAILURE);
+}
+
+void parent_process(t_data *data)
+{
+	safe_close(data->pip[1]);
+	safe_close(data->to_read);
+	data->to_read = data->pip[0];
+	data->pip[0] = -1;
+	data->pip[1] = -1;
+}
+
+void child_process(t_param * param, t_data * data, int i)
+{
+	char **paths = get_path(param->envp);
+	char **arg;
+	
+	swap_io(param, data, i);
+	arg = ft_split(param->cmds[i], ' ');
+	check_acces(paths, param->cmds[i], data);
+	//data->cmd = param->cmds[i];
+	execve(data->path, data->arg, param->envp);
+	perror("after execve");
+	exit(EXIT_FAILURE);
+}
+
+
+
 int pipex(t_param *param, t_data *data)
 {
-	int status = 0;
-	int pipe_tab[2];
-	int i =  0;
+	int i = 0;
 	int childs_pid[param->cmd_nb];
-
-	init_data(data, param);
-	if (param->sep)
-		heredoc(param, data);
-	close(STDERR_FILENO);
-	swap_io(data);
+	int pid;
+	
 	while (i < param->cmd_nb)
 	{
-		if (i == param->cmd_nb - 1)
-			last_param(data);
-		create_and_check_pipe(pipe_tab, data);
-		set_infile_outfile(data, param);
-		data->arg = ft_split(param->cmds[i], ' ');
-		if (!data->arg)
-			return (EXIT_FAILURE);
-		if (!check_acces(param->paths, param->cmds[i], data))
-			return 0; //todo gerer erreur
-		data->cmd = param->cmds[i];
-		childs_pid[i] = fork_cmd(data);
-		free_tab(data->arg);
+		if (i < param->cmd_nb - 1)
+			safe_pipe(data->pip);
+		childs_pid[i] = fork();
+		if (childs_pid[i] < 0)
+			fail_process();
+		if (childs_pid[i] == 0)
+			child_process(param, data, i);
+		if (i < param->cmd_nb - 1)
+			parent_process(data);
 		i++;
 	}
-	free_tab(param->paths);
-	return status;
+	return wait_childs(param->cmd_nb, childs_pid);
 }
