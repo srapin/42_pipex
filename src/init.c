@@ -25,7 +25,6 @@ t_boolen parse_args(int ac, char **av, char ** envp, t_param *param)
 	param->heredoc_fd=-1;
 	if (ft_strisequal("here_doc", av[1]))
 	{
-		//heredoc(param);
 		param->infile = NULL;
 		param->sep = av[2];
 		i += 1;

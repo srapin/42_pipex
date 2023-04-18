@@ -23,7 +23,10 @@ int main(int ac, char** av, char **envp)
 		return 1;
 	}
 	init_data(&data);
-	if (param.sep)
+	// dup2(open("in", O_RDONLY), STDIN_FILENO);
+	// dup2(open("out", O_WRONLY), STDIN_FILENO);
+	// dup2(open("err", O_WRONLY), STDIN_FILENO);
+	if (!param.infile)
 		heredoc(&param, &data);
 	//first_swap(&param);
 	return pipex(&param, &data);

@@ -50,23 +50,6 @@ int fork_cmd(t_data *data)
 	free(data->path);
 	return (pid);
 }
-
-int wait_childs(int size, int *childs_pid)
-{
-	int i;
-	int status;
-
-	i = 0;
-	status = 0;
-	while (i < size)
-	{
-		waitpid(childs_pid[i], &status, 0);
-		i++;
-	}
-	return (WIFEXITED(status) && WEXITSTATUS(status));
-	
-}
-
 void first_swap(t_param *param)
 {
 	int fd;
@@ -89,6 +72,23 @@ void first_swap(t_param *param)
 
 */
 
+int wait_childs(int size, int *childs_pid)
+{
+	int i;
+	int status;
+
+	i = 0;
+	status = 0;
+	while (i < size)
+	{
+		waitpid(childs_pid[i], &status, 0);
+		i++;
+	}
+	return (WIFEXITED(status) && WEXITSTATUS(status));
+	
+}
+
+
 void fail_process()
 {
 	perror("fork error");
@@ -97,8 +97,8 @@ void fail_process()
 
 void parent_process(t_data *data)
 {
-	safe_close(data->pip[1]);
-	safe_close(data->to_read);
+	safe_close(&(data->pip[1]));
+	safe_close(&(data->to_read));
 	data->to_read = data->pip[0];
 	data->pip[0] = -1;
 	data->pip[1] = -1;
@@ -108,11 +108,16 @@ void child_process(t_param * param, t_data * data, int i)
 {
 	char **paths = get_path(param->envp);
 	char **arg;
+	// ft_putstr_fd("child=", 2);
+	// ft_putnbr_fd(i, 2);
+	// ft_putstr_fd( "\n", 2);
 	
 	swap_io(param, data, i);
-	arg = ft_split(param->cmds[i], ' ');
+	//safe_close(data->pip[0]);
+	data->arg = ft_split(param->cmds[i], ' ');
 	check_acces(paths, param->cmds[i], data);
 	//data->cmd = param->cmds[i];
+	//safe_close(param)
 	execve(data->path, data->arg, param->envp);
 	perror("after execve");
 	exit(EXIT_FAILURE);
@@ -130,14 +135,16 @@ int pipex(t_param *param, t_data *data)
 	{
 		if (i < param->cmd_nb - 1)
 			safe_pipe(data->pip);
+		if (i == 1)
+			safe_close(&(param->heredoc_fd));		
 		childs_pid[i] = fork();
 		if (childs_pid[i] < 0)
 			fail_process();
 		if (childs_pid[i] == 0)
 			child_process(param, data, i);
-		if (i < param->cmd_nb - 1)
-			parent_process(data);
+		parent_process(data);
 		i++;
 	}
+	safe_close(&(param->heredoc_fd));
 	return wait_childs(param->cmd_nb, childs_pid);
 }

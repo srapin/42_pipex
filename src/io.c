@@ -35,15 +35,22 @@ void swap_io(t_param * param, t_data * data, int i)
 		fd = open(param->infile, O_RDONLY);
 	else
 		fd = data->to_read;
+
+	// ft_putstr_fd("stdin=", 2);
+	// ft_putnbr_fd(fd, 2);
+	// ft_putstr_fd("\n", 2);
 	dup2(fd, STDIN_FILENO);
-	close(fd);
+	safe_close(&fd);
 	if (i == param->cmd_nb - 1)
 		fd = open(param->outfile, O_WRONLY | O_CREAT | O_TRUNC, 0666);
 	else
 	{
-		close(data->pip[0]);
+		safe_close(&(data->pip[0]));
 		fd = data->pip[1];
 	}
+	// ft_putstr_fd("stdout=", 2);
+	// ft_putnbr_fd(fd, 2);
+	// ft_putstr_fd("\n", 2);
 	dup2(fd, STDOUT_FILENO);
-	close(fd);
+	safe_close(&fd);
 }

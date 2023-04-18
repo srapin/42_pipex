@@ -35,6 +35,7 @@ void safe_pipe(int pipe_tab[2])
 	}
 }
 
+#include <stdio.h>
 void  check_acces(char **paths, char *cmd, t_data *data)
 {
 	int i;
@@ -44,18 +45,26 @@ void  check_acces(char **paths, char *cmd, t_data *data)
 	while(paths && paths[i])
 	{
 		path = ft_strjoin(paths[i], data->arg[0]);
+		//ft_printf(path);
 		if (path && access(path, X_OK) == 0)
+		{
 			data->path = path;
+			return;
+		}
 		free(path);
 		i++;
 	}
 	exit(EXIT_FAILURE);
 }
 
-void safe_close(int  fd)
+void safe_close(int  *fd)
 {
-	if (fd != -1)
-		close(fd); //0 = lecture 
+	if (*fd > 2)
+	{
+
+		close(*fd); //0 = lecture 
+		*fd = -1;
+	}
 	
 }
 

@@ -78,7 +78,7 @@ int pipex(t_param *param, t_data * data);
 //safe
 void create_and_check_pipe(int pipe_tab[2], t_data *data);
 void check_acces(char **paths, char *cmd, t_data *data);
-void safe_close(int  fd);
+void safe_close(int * fd);
 void safe_pipe(int pipe_tab[2]);
 
 //tools
