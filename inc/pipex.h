@@ -6,7 +6,7 @@
 /*   By: srapin <srapin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/29 23:50:53 by srapin            #+#    #+#             */
-/*   Updated: 2023/04/24 00:03:23 by srapin           ###   ########.fr       */
+/*   Updated: 2023/04/24 00:11:06 by srapin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,7 +69,7 @@ void		fail_process(void);
 int			pipex(t_param *param, t_data *data);
 
 //safe
-void		check_acces(char **paths, char *cmd, t_data *data);
+t_boolen	check_acces(char **paths, char *cmd, t_data *data);
 void		safe_close(int *fd);
 void		safe_pipe(int pipe_tab[2]);
 

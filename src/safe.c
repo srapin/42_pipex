@@ -6,7 +6,7 @@
 /*   By: srapin <srapin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/03 02:22:15 by srapin            #+#    #+#             */
-/*   Updated: 2023/04/24 00:00:31 by srapin           ###   ########.fr       */
+/*   Updated: 2023/04/24 00:11:34 by srapin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ void	safe_pipe(int pipe_tab[2])
 	}
 }
 
-void	check_acces(char **paths, char *cmd, t_data *data)
+t_boolen	check_acces(char **paths, char *cmd, t_data *data)
 {
 	int		i;
 	char	*path;
@@ -33,12 +33,12 @@ void	check_acces(char **paths, char *cmd, t_data *data)
 		if (path && access(path, X_OK) == 0)
 		{
 			data->path = path;
-			return ;
+			return (true);
 		}
 		free(path);
 		i++;
 	}
-	exit(EXIT_FAILURE);
+	return (false);
 }
 
 void	safe_close(int *fd)

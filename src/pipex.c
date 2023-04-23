@@ -6,7 +6,7 @@
 /*   By: srapin <srapin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/23 23:50:53 by srapin            #+#    #+#             */
-/*   Updated: 2023/04/23 23:59:52 by srapin           ###   ########.fr       */
+/*   Updated: 2023/04/24 00:10:37 by srapin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ void	parent_process(t_data *data)
 	data->pip[1] = -1;
 }
 
-void	child_process(t_param *param, t_data *data, int i)
+void	child_process(t_param *param, t_data *data, int i, int *to_free)
 {
 	char	**paths;
 	char	**arg;
@@ -51,9 +51,13 @@ void	child_process(t_param *param, t_data *data, int i)
 	paths = get_path(param->envp);
 	swap_io(param, data, i);
 	data->arg = ft_split(param->cmds[i], ' ');
-	check_acces(paths, param->cmds[i], data);
-	execve(data->path, data->arg, param->envp);
-	perror("after execve");
+	if (check_acces(paths, param->cmds[i], data))
+		execve(data->path, data->arg, param->envp);
+	perror("cmd not found");
+	free_tab(paths);
+	free_tab(data->arg);
+	free(data->path);
+	free(to_free);
 	exit(EXIT_FAILURE);
 }
 
@@ -77,7 +81,7 @@ int	pipex(t_param *param, t_data *data)
 		if (childs_pid[i] < 0)
 			fail_process();
 		if (childs_pid[i] == 0)
-			child_process(param, data, i);
+			child_process(param, data, i, childs_pid);
 		parent_process(data);
 		i++;
 	}
