@@ -6,7 +6,7 @@
 /*   By: srapin <srapin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/26 23:54:01 by srapin            #+#    #+#             */
-/*   Updated: 2023/03/17 00:15:27 by srapin           ###   ########.fr       */
+/*   Updated: 2023/04/23 23:42:39 by srapin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,7 +109,6 @@ char	*get_next_line(int fd)
 
 	if (fd < 0 || fd > MAX_FD)
 	{
-		//perror("gnl bad\n");
 		return (NULL);
 	}
 	line = get_line(fd, buffer[fd]);

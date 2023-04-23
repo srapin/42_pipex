@@ -28,9 +28,9 @@ INCLUDES = $(addprefix $(INCLUDES_DIR)/, $(INCLUDES_FILES))
 
 all: $(NAME)
 
-$(NAME): lib $(OBJS)
+$(NAME): $(LIBFT) $(OBJS)
 	$(CC) $(OBJS) $(LIBFT) $(CFLAGS) -o $@
-#remettre flag !
+
 ${OBJS_DIR}/%.o: ${SRCS_DIR}/%.c $(INCLUDES)
 	@mkdir -p $(OBJS_DIR)
 	$(CC)  -o $@ -c $<
@@ -44,7 +44,7 @@ fclean: clean
 
 re: clean all
 
-lib:
+$(LIBFT):
 	make -C $(LIBFT_DIR)
 
 cleanlibs:

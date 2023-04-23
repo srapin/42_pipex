@@ -6,39 +6,44 @@
 /*   By: srapin <srapin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/03 02:18:54 by srapin            #+#    #+#             */
-/*   Updated: 2023/04/17 23:48:15 by srapin           ###   ########.fr       */
+/*   Updated: 2023/04/23 23:48:55 by srapin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-
 #include "../inc/pipex.h"
 
-/*
-void set_infile_outfile(t_data *data, t_param *param)
+void	check_io(t_param *param, t_data *data)
 {
-	data->new_in = data->prev_pip[0]; //ancien en lecture
-	data->new_out = data->current_pip[1]; // current en ecriture
+	t_boolen	flag;
+
+	flag = true;
+	if (param->infile && access(param->infile, F_OK | R_OK) == -1)
+	{
+		perror("acces");
+		flag = false;
+	}
+	if (access(param->outfile, F_OK) != -1
+		&& access(param->outfile, W_OK) == -1)
+	{
+		perror("acces");
+		flag = false;
+	}
+	if (flag == false)
+		exit(EXIT_FAILURE);
 }
-*/
 
-
-
-
-void swap_io(t_param * param, t_data * data, int i)
+void	swap_io(t_param *param, t_data *data, int i)
 {
-	//todo proteger?
-	int fd;
-	
+	int	fd;
+
 	if (i == 0 && param->heredoc_fd > -1)
 		fd = param->heredoc_fd;
 	else if (i == 0)
 		fd = open(param->infile, O_RDONLY);
 	else
 		fd = data->to_read;
-
-	// ft_putstr_fd("stdin=", 2);
-	// ft_putnbr_fd(fd, 2);
-	// ft_putstr_fd("\n", 2);
+	if (fd == -1)
+		exit(EXIT_FAILURE);
 	dup2(fd, STDIN_FILENO);
 	safe_close(&fd);
 	if (i == param->cmd_nb - 1)
@@ -48,9 +53,8 @@ void swap_io(t_param * param, t_data * data, int i)
 		safe_close(&(data->pip[0]));
 		fd = data->pip[1];
 	}
-	// ft_putstr_fd("stdout=", 2);
-	// ft_putnbr_fd(fd, 2);
-	// ft_putstr_fd("\n", 2);
+	if (fd == -1)
+		exit(EXIT_FAILURE);
 	dup2(fd, STDOUT_FILENO);
 	safe_close(&fd);
 }

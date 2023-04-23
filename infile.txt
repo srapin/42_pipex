@@ -1,4 +1,0 @@
-infile
-truc
-bidule
-a1

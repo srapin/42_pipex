@@ -6,12 +6,12 @@
 #    By: srapin <srapin@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/10/05 01:15:01 by srapin            #+#    #+#              #
-#    Updated: 2023/02/12 13:13:14 by srapin           ###   ########.fr        #
+#    Updated: 2023/04/23 23:07:22 by srapin           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME	= lib.a
-CC	= gcc
+CC	= cc
 CFLAGS	= -Wall -Wextra -Werror -g3
 AR	= ar -rc
 SRC	= ft_isalpha.c\

@@ -6,13 +6,13 @@
 #    By: srapin <srapin@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/11/21 21:53:58 by therodri          #+#    #+#              #
-#    Updated: 2023/02/12 13:13:41 by srapin           ###   ########.fr        #
+#    Updated: 2023/04/23 23:25:25 by srapin           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME = libft.a
 
-CC = gcc
+CC = cc
 CFLAGS = -Wall -Wextra -Werror
 AR = ar rcs
 
@@ -49,7 +49,6 @@ $(NAME): $(OBJS) $(LIBFT)
 
 $(LIBFT) :
 		make -C $(LIBFT_DIR)
-
 
 %.o: %.c
 	$(CC) $(CFLAGS) -c $< -o $@
