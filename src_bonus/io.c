@@ -6,7 +6,7 @@
 /*   By: srapin <srapin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/03 02:18:54 by srapin            #+#    #+#             */
-/*   Updated: 2023/04/24 01:49:15 by srapin           ###   ########.fr       */
+/*   Updated: 2023/04/24 20:17:02 by srapin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,8 +29,8 @@ void	check_io(t_param *param)
 		param->outfile = NULL;
 	}
 	if (access(param->outfile, F_OK) == -1)
-		safe_close(&(int){open(param->outfile, O_WRONLY | O_CREAT | O_TRUNC,
-				0666)});
+		safe_close(&(int){open(param->outfile, O_WRONLY | O_CREAT,
+				S_IRWXU)});
 	if (flag == false)
 		exit(EXIT_FAILURE);
 }
@@ -49,8 +49,10 @@ void	swap_io(t_param *param, t_data *data, int i)
 		exit(EXIT_FAILURE);
 	dup2(fd, STDIN_FILENO);
 	safe_close(&fd);
-	if (i == param->cmd_nb - 1)
-		fd = open(param->outfile, O_WRONLY | O_CREAT | O_TRUNC, 0666);
+	if (i == param->cmd_nb - 1 && param->infile)
+		fd = open(param->outfile, O_WRONLY | O_CREAT | O_TRUNC, S_IRWXU);
+	else if (i == param->cmd_nb - 1)
+		fd = open(param->outfile, O_WRONLY | O_CREAT | O_APPEND, 0666);
 	else
 	{
 		safe_close(&(data->pip[0]));

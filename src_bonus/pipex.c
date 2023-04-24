@@ -6,7 +6,7 @@
 /*   By: srapin <srapin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/23 23:50:53 by srapin            #+#    #+#             */
-/*   Updated: 2023/04/24 01:50:19 by srapin           ###   ########.fr       */
+/*   Updated: 2023/04/24 20:24:16 by srapin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,6 @@ int	wait_childs(int size, int *childs_pid)
 void	fail_process(void)
 {
 	perror("fork error");
-	exit(EXIT_FAILURE);
 }
 
 void	parent_process(t_data *data)
@@ -63,11 +62,11 @@ void	child_process(t_param *param, t_data *data, int i, int *to_free)
 int	pipex(t_param *param, t_data *data)
 {
 	int	i;
-	int	*childs_pid;
+	int	*pid;
 
 	i = 0;
-	childs_pid = malloc(param->cmd_nb * sizeof(int));
-	if (!childs_pid)
+	pid = malloc(param->cmd_nb * sizeof(int));
+	if (!pid)
 		exit(EXIT_FAILURE);
 	while (i < param->cmd_nb)
 	{
@@ -75,14 +74,15 @@ int	pipex(t_param *param, t_data *data)
 			safe_pipe(data->pip);
 		if (i == 1)
 			safe_close(&(param->heredoc_fd));
-		childs_pid[i] = fork();
-		if (childs_pid[i] < 0)
+		pid[i] = fork();
+		if (pid[i] < 0)
 			fail_process();
-		if (childs_pid[i] == 0)
-			child_process(param, data, i, childs_pid);
-		parent_process(data);
+		if (pid[i] == 0)
+			child_process(param, data, i, pid);
+		if (pid[i] > 0)
+			parent_process(data);
 		i++;
 	}
 	safe_close(&(param->heredoc_fd));
-	return (wait_childs(param->cmd_nb, childs_pid));
+	return (wait_childs(param->cmd_nb, pid));
 }

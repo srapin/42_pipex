@@ -6,7 +6,7 @@
 /*   By: srapin <srapin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/30 00:02:58 by srapin            #+#    #+#             */
-/*   Updated: 2023/04/24 01:49:34 by srapin           ###   ########.fr       */
+/*   Updated: 2023/04/24 17:52:38 by srapin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,9 +40,7 @@ int	heredoc(t_param *param, t_data *data)
 	if (pid < 0)
 		fail_process();
 	if (!pid)
-	{
 		heredoc_process(param, data);
-	}
 	wait(&status);
 	safe_close(&(data->pip[1]));
 	param->heredoc_fd = data->pip[0];
