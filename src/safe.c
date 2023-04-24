@@ -6,7 +6,7 @@
 /*   By: srapin <srapin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/03 02:22:15 by srapin            #+#    #+#             */
-/*   Updated: 2023/04/24 01:44:50 by srapin           ###   ########.fr       */
+/*   Updated: 2023/04/24 21:50:12 by srapin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,10 @@ t_boolen	check_acces(char **paths, t_data *data)
 		free(path);
 		i++;
 	}
-	return (false);
+	if (access(data->arg[0], X_OK) != 0)
+		return (false);
+	data->path = path;
+	return (true);
 }
 
 void	safe_close(int *fd)

@@ -2,7 +2,7 @@ NAME = pipex
 NAME_BONUS = pipex_bonus
 
 CC = cc
-CFLAGS = -Wall -Wextra -Werror -g -g3 -Wuninitialized 
+CFLAGS = -Wall -Wextra -Werror
 
 FILES = init \
 		io \

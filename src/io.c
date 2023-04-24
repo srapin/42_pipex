@@ -6,7 +6,7 @@
 /*   By: srapin <srapin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/03 02:18:54 by srapin            #+#    #+#             */
-/*   Updated: 2023/04/24 01:43:31 by srapin           ###   ########.fr       */
+/*   Updated: 2023/04/24 22:01:12 by srapin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,25 +14,14 @@
 
 void	check_io(t_param *param)
 {
-	t_boolen	flag;
-
-	flag = true;
 	if (param->infile && access(param->infile, F_OK | R_OK) == -1)
-	{
 		perror("acces infile");
-		flag = false;
-	}
 	if (access(param->outfile, F_OK) != -1
 		&& access(param->outfile, W_OK) == -1)
-	{
 		perror("acces outfile");
-		param->outfile = NULL;
-	}
 	if (access(param->outfile, F_OK) == -1)
-		safe_close(&(int){open(param->outfile, O_WRONLY | O_CREAT | O_TRUNC,
+		safe_close(&(int){open(param->outfile, O_WRONLY | O_CREAT,
 				0666)});
-	if (flag == false)
-		exit(EXIT_FAILURE);
 }
 
 void	swap_io(t_param *param, t_data *data, int i)
