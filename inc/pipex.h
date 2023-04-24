@@ -6,7 +6,7 @@
 /*   By: srapin <srapin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/29 23:50:53 by srapin            #+#    #+#             */
-/*   Updated: 2023/04/24 00:11:06 by srapin           ###   ########.fr       */
+/*   Updated: 2023/04/24 01:45:00 by srapin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,7 @@ void		init_data(t_data *data);
 
 //io
 void		swap_io(t_param *param, t_data *data, int i);
-void		check_io(t_param *param, t_data *data);
+void		check_io(t_param *param);
 
 //main
 int			main(int ac, char **av, char **envp);
@@ -69,7 +69,7 @@ void		fail_process(void);
 int			pipex(t_param *param, t_data *data);
 
 //safe
-t_boolen	check_acces(char **paths, char *cmd, t_data *data);
+t_boolen	check_acces(char **paths, t_data *data);
 void		safe_close(int *fd);
 void		safe_pipe(int pipe_tab[2]);
 

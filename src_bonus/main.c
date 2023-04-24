@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   heredoc.c                                          :+:      :+:    :+:   */
+/*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: srapin <srapin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/04/03 02:15:56 by srapin            #+#    #+#             */
-/*   Updated: 2023/04/23 23:44:08 by srapin           ###   ########.fr       */
+/*   Created: 2023/03/30 00:02:58 by srapin            #+#    #+#             */
+/*   Updated: 2023/04/24 01:49:34 by srapin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,4 +49,21 @@ int	heredoc(t_param *param, t_data *data)
 	data->pip[0] = -1;
 	data->pip[1] = -1;
 	return (status);
+}
+
+int	main(int ac, char **av, char **envp)
+{
+	t_param	param;
+	t_data	data;
+
+	if ((!parse_args(ac, av, envp, &param)))
+	{
+		ft_printf("parse error");
+		return (1);
+	}
+	init_data(&data);
+	if (!param.infile)
+		heredoc(&param, &data);
+	check_io(&param);
+	return (pipex(&param, &data));
 }
