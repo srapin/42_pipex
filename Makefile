@@ -1,4 +1,5 @@
 NAME = pipex
+NAME_BONUS = pipex_bonus
 
 CC = cc
 CFLAGS = -Wall -Wextra -Werror -g -g3 -Wuninitialized 
@@ -41,9 +42,10 @@ ${OBJS_DIR}/%.o: ${SRCS_DIR}/%.c $(INCLUDES)
 	@mkdir -p $(OBJS_DIR)
 	$(CC) $(CFLAGS) -o $@ -c $<
 
+bonus : $(NAME_BONUS)
 
-bonus : $(LIBFT) $(OBJS_BONUS)
-	$(CC) $(OBJS_BONUS) $(LIBFT) $(CFLAGS) -o $(NAME)
+$(NAME_BONUS) : $(LIBFT) $(OBJS_BONUS)
+	$(CC) $(OBJS_BONUS) $(LIBFT) $(CFLAGS) -o $@
 	rm -rf $(OBJS_DIR)
 
 ${OBJS_DIR_BONUS}/%.o: ${SRCS_DIR_BONUS}/%.c $(INCLUDES)
@@ -56,6 +58,7 @@ clean: cleanlibs
 
 fclean: clean
 	rm -f $(NAME)
+	rm -f $(NAME_BONUS)
 
 re: clean all
 
