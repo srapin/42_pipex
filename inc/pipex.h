@@ -6,7 +6,7 @@
 /*   By: srapin <srapin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/29 23:50:53 by srapin            #+#    #+#             */
-/*   Updated: 2023/04/24 21:01:27 by srapin           ###   ########.fr       */
+/*   Updated: 2023/04/24 23:02:00 by srapin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,7 @@ t_boolen	parse_args(int ac, char **av, char **envp, t_param *param);
 void		init_data(t_data *data);
 
 //io
-void		swap_io(t_param *param, t_data *data, int i);
+void		swap_io(t_param *param, t_data *data, int i, int *to_free);
 void		check_io(t_param *param);
 
 //main

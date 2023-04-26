@@ -6,7 +6,7 @@
 /*   By: srapin <srapin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/23 23:50:53 by srapin            #+#    #+#             */
-/*   Updated: 2023/04/24 01:45:13 by srapin           ###   ########.fr       */
+/*   Updated: 2023/04/24 23:03:10 by srapin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,8 +47,8 @@ void	child_process(t_param *param, t_data *data, int i, int *to_free)
 {
 	char	**paths;
 
+	swap_io(param, data, i, to_free);
 	paths = get_path(param->envp);
-	swap_io(param, data, i);
 	data->arg = ft_split(param->cmds[i], ' ');
 	if (check_acces(paths, data))
 		execve(data->path, data->arg, param->envp);
